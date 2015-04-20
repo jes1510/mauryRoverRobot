@@ -1,29 +1,14 @@
-/* Ping))) Sensor
-  
-   This sketch reads a PING))) ultrasonic rangefinder and returns the
-   distance to the closest object in range. To do this, it sends a pulse
-   to the sensor to initiate a reading, then listens for a pulse 
-   to return.  The length of the returning pulse is proportional to 
-   the distance of the object from the sensor.
-     
-   The circuit:
-	* +V connection of the PING))) attached to +5V
-	* GND connection of the PING))) attached to ground
-	* SIG connection of the PING))) attached to digital pin 7
-
+/* Based on the PING example by Tom Igoe from
    http://www.arduino.cc/en/Tutorial/Ping
-   
-   created 3 Nov 2008
-   by David A. Mellis
-   modified 30 Aug 2011
-   by Tom Igoe
+     
+   Original source code for Maury Rover Robot is located here:
+   https://github.com/jes1510/mauryRoverRobot
  
    This example code is in the public domain.
 
  */
 
-// this constant won't change.  It's the pin number
-// of the sensor's output:
+// Defines for pins
 #define pingOutPin 7
 #define pingInPin 8
 #define RMOTORAPIN 5
@@ -37,8 +22,12 @@
 void setup() {
   // initialize serial communication:
   Serial.begin(9600);
+  
+  // Configure Sensor pin
   pinMode(pingOutPin, OUTPUT);
   pinMode(pingInPin, INPUT);
+  
+    // Configure motor Pins
   pinMode(RMOTORAPIN, OUTPUT);
   pinMode(RMOTORBPIN, OUTPUT);
   pinMode(LMOTORAPIN, OUTPUT);
@@ -48,15 +37,11 @@ void setup() {
 }
 
 void loop()
-{
-  
+{  
   forward(255);
   delay(3000);
   forward(0);
-  delay(1000);
-  
-  
-  
+  delay(1000); 
 }
 
 void forward(int s)
@@ -83,30 +68,18 @@ long doPing(void)
   digitalWrite(pingOutPin, LOW);
   delayMicroseconds(2);
   digitalWrite(pingOutPin, HIGH);
-  delayMicroseconds(5);
+  delayMicroseconds(10);
   digitalWrite(pingOutPin, LOW);
 
-  // The same pin is used to read the signal from the PING))): a HIGH
-  // pulse whose duration is the time (in microseconds) from the sending
-  // of the ping to the reception of its echo off of an object.
-
+  // Read the pulse in pin
   duration = pulseIn(pingInPin, HIGH);
 
-  // convert the time into a distance
- // inches = microsecondsToInches(duration);
-//  cm = microsecondsToCentimeters(duration);
-  
-  Serial.print(inches);
-  Serial.print("in, ");
-  Serial.print(cm);
-  Serial.print("cm");
-  Serial.println();
-  
-  delay(100);
-  
+  // Return the pulse width
   return duration;
   
 }
+
+
 
 long microsecondsToInches(long microseconds)
 {
