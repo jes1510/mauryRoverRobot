@@ -16,6 +16,11 @@
 #define LMOTORAPIN 9
 #define LMOTORBPIN 10
 
+long distance;
+long echo;
+
+int lastTime;
+int currentTime;
 
 
 
@@ -34,14 +39,22 @@ void setup() {
   pinMode(LMOTORBPIN, OUTPUT);
   
   
+  
+  
 }
 
 void loop()
 {  
-  forward(255);
-  delay(3000);
-  forward(0);
-  delay(1000); 
+  //forward(255);
+  //delay(3000);
+ // forward(0);
+ // delay(1000); 
+ 
+ echo = doPing();
+ distance = microsecondsToInches(echo);
+ Serial.println(distance);
+ delay(500);
+ 
 }
 
 void forward(int s)
@@ -73,8 +86,9 @@ long doPing(void)
 
   // Read the pulse in pin
   duration = pulseIn(pingInPin, HIGH);
-
+  
   // Return the pulse width
+  
   return duration;
   
 }
