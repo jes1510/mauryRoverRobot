@@ -28,6 +28,10 @@ int currentTime;
 int servoPosition = 0;
 
 
+int angles[5] = {0, 45, 90, 135, 180};
+int ranges[5] = {0, 0,  0,  0,   0};
+
+
 void setup() {
   // initialize serial communication:
   Serial.begin(9600);
@@ -45,6 +49,9 @@ void setup() {
   // configure the scan servo
   scanServo.attach(11);
   
+  scan();
+  forward(128);
+  
   
   
   
@@ -52,32 +59,16 @@ void setup() {
 
 void loop()
 {  
-  //forward(255);
+ 
+  
+  scan();
+  
+ // forward(128);
   //delay(3000);
  // forward(0);
  // delay(1000); 
  
- for (servoPosition = 0; servoPosition < 180; servoPosition+= 15)
- {
-   scanServo.write(servoPosition);
-   delay(15);
-   
-   echo = doPing();
-   distance = microsecondsToInches(echo);
-   Serial.println(distance);
-   delay(75);
- }
- 
-  for (servoPosition = 180; servoPosition >= 1; servoPosition-= 15)
- {
-   scanServo.write(servoPosition);
-   delay(15);
-   
-   echo = doPing();
-   distance = microsecondsToInches(echo);
-   Serial.println(distance);
-   delay(75);
- }
+
  
   // delay(500);
  
@@ -92,6 +83,40 @@ void forward(int s)
 }
 
 
+int range(int angle)
+{
+  int i;
+  long sum;
+  int avg;
+  
+  scanServo.write(angle);
+  delay(250);
+  
+  for(i=0; i<11; i++)
+  {
+    echo = doPing();    
+    sum += microsecondsToInches(echo);  
+  }
+  
+  avg = sum/10;  
+  return avg;
+}
+  
+  
+    
+  
+  
+void scan(void)
+{
+  int i;
+  for (i=0; i< (sizeof(angles) + 1); i++)
+  {
+    ranges[i] = range(angles[i]);
+    Serial.println(i);
+    
+  }
+}
+  
 
 
 
@@ -137,4 +162,29 @@ long microsecondsToCentimeters(long microseconds)
   // The ping travels out and back, so to find the distance of the
   // object we take half of the distance travelled.
   return microseconds / 29 / 2;
+}
+
+void steppedScan(void)
+{
+   for (servoPosition = 0; servoPosition < 180; servoPosition+= 15)
+ {
+   scanServo.write(servoPosition);
+   delay(15);
+   
+   echo = doPing();
+   distance = microsecondsToInches(echo);
+   Serial.println(distance);
+   delay(75);
+ }
+ 
+  for (servoPosition = 180; servoPosition >= 1; servoPosition-= 15)
+ {
+   scanServo.write(servoPosition);
+   delay(15);
+   
+   echo = doPing();
+   distance = microsecondsToInches(echo);
+   Serial.println(distance);
+   delay(75);
+ }
 }
