@@ -7,6 +7,8 @@
    This example code is in the public domain.
 
  */
+ 
+#include <Servo.h>
 
 // Defines for pins
 #define pingOutPin 7
@@ -16,12 +18,14 @@
 #define LMOTORAPIN 9
 #define LMOTORBPIN 10
 
+Servo scanServo;
+
+// global variables
 long distance;
 long echo;
-
 int lastTime;
 int currentTime;
-
+int servoPosition = 0;
 
 
 void setup() {
@@ -38,6 +42,9 @@ void setup() {
   pinMode(LMOTORAPIN, OUTPUT);
   pinMode(LMOTORBPIN, OUTPUT);
   
+  // configure the scan servo
+  scanServo.attach(11);
+  
   
   
   
@@ -50,10 +57,29 @@ void loop()
  // forward(0);
  // delay(1000); 
  
- echo = doPing();
- distance = microsecondsToInches(echo);
- Serial.println(distance);
- delay(500);
+ for (servoPosition = 0; servoPosition < 180; servoPosition+= 15)
+ {
+   scanServo.write(servoPosition);
+   delay(15);
+   
+   echo = doPing();
+   distance = microsecondsToInches(echo);
+   Serial.println(distance);
+   delay(75);
+ }
+ 
+  for (servoPosition = 180; servoPosition >= 1; servoPosition-= 15)
+ {
+   scanServo.write(servoPosition);
+   delay(15);
+   
+   echo = doPing();
+   distance = microsecondsToInches(echo);
+   Serial.println(distance);
+   delay(75);
+ }
+ 
+  // delay(500);
  
 }
 
