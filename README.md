@@ -8,4 +8,6 @@ You should have received a copy of the GNU General Public License along with thi
 
 Use it at your own risk. Assume that I have no idea what I am doing.
 
-This is the source code for Maury Middle School rover robot for the robotics club.  It is meant to be used as a base for building the students source projects.
+This is the source code for Maury Middle School rover robot for the robotics club.  It is meant to be used as a base for building the students source projects.  It depends on the Ardublock visual IDE.  It can be downloaded here:
+http://blog.ardublock.com/engetting-started-ardublockzhardublock/
+
